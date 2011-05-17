@@ -1,0 +1,40 @@
+#! /bin/sh
+
+# NAME=<name of the service>
+# DESCRIPTION=<description of the service>
+# USER=<username>
+# INSTALLATION_DIR=<installation directory>
+# LOG_DIR=<log directory>
+
+test -f /usr/bin/java || exit 0
+. /lib/lsb/init-functions
+PIDFILE=/var/run/$NAME.pid
+PATH=$PATH:/sbin
+
+case "$1" in
+start)  log_daemon_msg "Starting $DESCRIPTION" "$NAME"
+        start-stop-daemon \
+          --chdir $INSTALLATION_DIR \
+          --user $USER \
+          --chuid $USER \
+          --background \
+          --start \
+          --quiet \
+          --make-pidfile \
+          --pidfile $PIDFILE \
+          --startas $INSTALLATION_DIR/start-java.sh -- -jar $INSTALLATION_DIR/$NAME.jar \
+          $LSBNAMES \
+          $EXTRA_OPTS
+        log_end_msg $?
+        ;;
+stop)   log_daemon_msg "Stopping $DESCRIPTION" "$NAME"
+        start-stop-daemon --stop --quiet --pidfile $PIDFILE
+        [ "$?" = 2 ] && return 2
+        rm -f $PIDFILE
+        log_end_msg $?
+        ;;
+*)      log_action_msg "Usage: /etc/init.d/$NAME {start|stop}"
+        exit 2
+        ;;
+esac
+exit 0
