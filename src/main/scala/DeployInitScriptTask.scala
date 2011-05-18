@@ -10,8 +10,8 @@ trait DeployInitScriptTask extends Connection with MavenStyleScalaPaths { this: 
     )
     None
   }
-  def preInstallation: Unit = runInitScriptStart
-  def postInstallation: Unit = runInitScriptStop
+  def preInstallation: Unit = runInitScriptStop
+  def postInstallation: Unit = runInitScriptStart
   def runInitScriptStart = executeRemoteCommands(hostname, "sudo /etc/init.d/" + projectName.value + " start")
   def runInitScriptStop = executeRemoteCommands(hostname, "sudo /etc/init.d/" + projectName.value + " stop")
   def initScriptFilename: String = projectName.value
