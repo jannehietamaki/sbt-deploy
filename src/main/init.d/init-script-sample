@@ -13,7 +13,7 @@ PATH=$PATH:/sbin
 
 case "$1" in
 start)  log_daemon_msg "Starting $DESCRIPTION" "$NAME"
-        start-stop-daemon \
+        NAME=$NAME LOG_DIR=$LOG_DIR start-stop-daemon \
           --chdir $INSTALLATION_DIR \
           --user $USER \
           --chuid $USER \
@@ -22,7 +22,7 @@ start)  log_daemon_msg "Starting $DESCRIPTION" "$NAME"
           --quiet \
           --make-pidfile \
           --pidfile $PIDFILE \
-          --startas $INSTALLATION_DIR/start-java.sh -- -jar $INSTALLATION_DIR/$NAME.jar \
+          --startas $INSTALLATION_DIR/start-java.sh -- -jar $INSTALLATION_DIR/$NAME/$NAME.jar \
           $LSBNAMES \
           $EXTRA_OPTS
         log_end_msg $?
