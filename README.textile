@@ -1,0 +1,30 @@
+h1. Project deploy plugin for simple-build-tool
+
+h2. Adding the plugin dependency
+
+Create a file, <code>project/plugins/build.sbt</code>, for plugin library dependencies with the following lines:
+
+<pre>
+<code>
+  resolvers += "sbt-deploy-repo" at "http://reaktor.github.com/sbt-deploy/maven"
+
+  libraryDependencies += "fi.reaktor" %% "sbt-deploy" % "0.2.0-SNAPSHOT" 
+</code>
+</pre>
+
+Then, start using the plugin by amending your settings in the build as follows:
+
+<pre>
+<code>
+import sbt._
+import sbt.deploy.DeployDistPlugin
+
+object MyProjectBuild extends Build {
+  lazy val MyProject = Project(
+    id = "my-project",
+    base = file("."),
+    settings = Defaults.defaultSettings ++ DeployDistPlugin.deployDistSettings
+  )
+}
+</code>
+</pre>
