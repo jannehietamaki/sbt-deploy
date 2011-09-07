@@ -8,6 +8,9 @@ trait SecureConnectivity {
     log.info("Executing command chain '" + chain + "' on remote server " + host + "...")
     "ssh -i " + identityFile + " " + user + "@" + host + " " + chain ! log
   }
+  def scp(log: Logger, identityFile: File, user: String, host: String, src: File, dst: String) {
+    scp(log, identityFile, user, host, src, new File(dst))
+  }
   def scp(log: Logger, identityFile: File, user: String, host: String, src: File, dst: File) {
     log.info("Copying file " + src + " to " + host + ":" + dst + "...")
     "scp -r -i " + identityFile + " " + src + " " + user + "@" + host + ":" + dst ! log

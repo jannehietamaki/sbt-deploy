@@ -22,7 +22,7 @@ object DeployDistPlugin extends Plugin with SecureConnectivity {
       new File(parent, name + "-latest")
     },
     deploy <<= (streams, identityFile, user, host, packageDist, instDir) map { (out, idFile, user, host, pkgPath, instDir) =>
-      scp(out.log, idFile, user, host, pkgPath, instDir)
+      scp(out.log, idFile, user, host, pkgPath, instDir.getParent)
       ssh(out.log, idFile, user, host,
         "cd " + instDir.getParent,
         "rm -rf " + instDir.getName,
