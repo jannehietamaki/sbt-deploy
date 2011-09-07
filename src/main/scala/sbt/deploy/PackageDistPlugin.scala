@@ -11,6 +11,13 @@ object PackageDistPlugin extends Plugin {
   val dependencyPackages = TaskKey[Seq[File]]("dependency-packages")
   val projectJarFile = packageBin in Compile
   lazy val packageDistSettings = Seq(
+    packageOptions <+= dependencyJarFiles map { files =>
+      import java.util.jar.Attributes.Name.CLASS_PATH
+      Package.ManifestAttributes((CLASS_PATH, files.map(_._2).mkString(" ")))
+    },
+    packageOptions <+= mainClass map { mainClass =>
+      Package.MainClass(mainClass.getOrElse(""))
+    },
     packageDist <<= (streams, distPackageContents, distPackagePath) map { (out, packageContents, packagePath) =>
       out.log.info("Packaging distribution " + packagePath + " ...")
       IO.zip(packageContents, packagePath)
