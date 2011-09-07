@@ -15,6 +15,8 @@ object DeployDistPlugin extends Plugin with SecureConnectivity {
   val host = SettingKey[String]("host")
   lazy val deployDistSettings = Seq(
     identityFile := new File(".ssh/id_rsa"),
+    beforeDeploy := Unit,
+    afterDeploy := Unit,
     deploy <<= (streams, identityFile, user, host, packageDist, instDir) map { (out, idFile, user, host, pkgPath, instDir) =>
       scp(out.log, idFile, user, host, pkgPath, instDir)
       ssh(out.log, idFile, user, host,
