@@ -10,13 +10,17 @@ object DeployDistPlugin extends Plugin with SecureConnectivity {
   val afterDeploy = TaskKey[Unit]("after-deploy", "A task that is run after deplyoing a distribution package")
   val deploy = TaskKey[Unit]("deploy", "Deploy distribution package to a remote server")
   val identityFile = SettingKey[File]("identity-filename")
-  val instDir = SettingKey[File]("inst-dir")
+  val instDirParent = SettingKey[File]("inst-dir-parent")
+  val instDir = TaskKey[File]("inst-dir")
   val user = SettingKey[String]("user")
   val host = SettingKey[String]("host")
   lazy val deployDistSettings = Seq(
     identityFile := new File(".ssh/id_rsa"),
     beforeDeploy := Unit,
     afterDeploy := Unit,
+    instDir <<= (instDirParent, name) map { (parent, name) =>
+      new File(parent, name + "-latest")
+    },
     deploy <<= (streams, identityFile, user, host, packageDist, instDir) map { (out, idFile, user, host, pkgPath, instDir) =>
       scp(out.log, idFile, user, host, pkgPath, instDir)
       ssh(out.log, idFile, user, host,
