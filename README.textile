@@ -1,4 +1,4 @@
-h1. A simple-build-tool 0.11.x plugin for deploying a project
+h1. A simple-build-tool 0.10.x / 0.11.x plugin for deploying a project
 
 h2. Overview
 
@@ -6,7 +6,17 @@ The sbt-deploy plugin consists of a set of plugins that provide reusable tasks a
 
 h2. Installation and usage
 
-Create a file, <code>project/plugins/build.sbt</code>, for plugin library dependencies with the following lines:
+Create a file, <code>project/plugins/build.sbt</code>, for plugin library dependencies with the following lines, if you're using sbt 0.10.x:
+
+<pre>
+<code>
+  resolvers += "sbt-deploy-repo" at "http://reaktor.github.com/sbt-deploy/maven"
+
+  libraryDependencies += "fi.reaktor" %% "sbt-deploy" % "0.3.0-SNAPSHOT" 
+</code>
+</pre>
+
+and if sbt 0.11.x:
 
 <pre>
 <code>
