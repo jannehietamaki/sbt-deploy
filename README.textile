@@ -12,7 +12,7 @@ Create a file, <code>project/plugins/build.sbt</code>, for plugin library depend
 <code>
   resolvers += "sbt-deploy-repo" at "http://reaktor.github.com/sbt-deploy/maven"
 
-  libraryDependencies += "fi.reaktor" %% "sbt-deploy" % "0.3.0-SNAPSHOT" 
+  addSbtPlugin("fi.reaktor" %% "sbt-deploy" % "0.3.0-SNAPSHOT")
 </code>
 </pre>
 
