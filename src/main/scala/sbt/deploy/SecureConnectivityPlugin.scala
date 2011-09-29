@@ -6,8 +6,12 @@ object SecureConnectivityPlugin extends Plugin {
   val identityFile = SettingKey[File]("identity-filename")
   val user = SettingKey[String]("user")
   val host = SettingKey[String]("host")
+  val userHome = System.getProperty("user.home")
+  val defaultIdentityFile = new File(".ssh/id_rsa")
+  val userIdentityFile = new File(userHome, ".ssh/id_rsa")
+  val identityFiles = Seq(defaultIdentityFile, userIdentityFile)
   lazy val secureConnectivitySettings: Seq[Setting[_]] = Seq(
-    identityFile := new File(".ssh/id_rsa")
+    identityFile := identityFiles.find(_.exists).getOrElse(defaultIdentityFile)
   )
   def ssh(log: Logger, identityFile: File, user: String, host: String, commands: String*) {
     val chain = commands(0) + commands.toList.tail.foldLeft("")(_ + " && " + _)
