@@ -4,7 +4,7 @@ organization := "fi.reaktor"
 
 name := "sbt-deploy"
 
-version := "0.3.0-SNAPSHOT"
+version := "0.3.1-SNAPSHOT"
 
 scalacOptions := Seq("-deprecation", "-unchecked")
 
