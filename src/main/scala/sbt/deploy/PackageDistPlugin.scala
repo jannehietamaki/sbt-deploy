@@ -4,12 +4,15 @@ import sbt._
 import Keys._
 
 object PackageDistPlugin extends Plugin {
-  val packageDist = TaskKey[File]("package-dist", "Create a distribution package")
-  val distPackagePath = TaskKey[File]("dist-package-filename", "The distribution package filename")
-  val distPackageContents = TaskKey[Seq[(File, String)]]("dist-package-contents", "The contents of the distribution package")
-  val dependencyJarFiles = TaskKey[Seq[(File, String)]]("dependency-jar-files")
-  val dependencyPackages = TaskKey[Seq[File]]("dependency-packages")
-  val projectJarFile = packageBin in Compile
+  object Keys {
+    val packageDist = TaskKey[File]("package-dist", "Create a distribution package")
+    val distPackagePath = TaskKey[File]("dist-package-filename", "The distribution package filename")
+    val distPackageContents = TaskKey[Seq[(File, String)]]("dist-package-contents", "The contents of the distribution package")
+    val dependencyJarFiles = TaskKey[Seq[(File, String)]]("dependency-jar-files")
+    val dependencyPackages = TaskKey[Seq[File]]("dependency-packages")
+    val projectJarFile = packageBin in Compile
+  }
+  import Keys._
   lazy val packageDistSettings = Seq(
     packageOptions <+= dependencyJarFiles map { files =>
       import java.util.jar.Attributes.Name.CLASS_PATH

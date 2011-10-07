@@ -5,11 +5,14 @@ import Keys._
 import SecureConnectivityPlugin._
 
 object DeployInitScriptPlugin extends Plugin {
-  val runInitScriptStart = TaskKey[Unit]("run-init-script-start")
-  val runInitScriptStop = TaskKey[Unit]("run-init-script-stop")
-  val deployInitScript = TaskKey[Unit]("deploy-init-script")
-  val initScriptPath = TaskKey[File]("init-script-path")
-  val tmpInitScriptPath = TaskKey[File]("tmp-init-script-path")
+  object Keys {
+    val runInitScriptStart = TaskKey[Unit]("run-init-script-start")
+    val runInitScriptStop = TaskKey[Unit]("run-init-script-stop")
+    val deployInitScript = TaskKey[Unit]("deploy-init-script")
+    val initScriptPath = TaskKey[File]("init-script-path")
+    val tmpInitScriptPath = TaskKey[File]("tmp-init-script-path")
+  }
+  import Keys._
   lazy val deployInitScriptSettings = Seq(
     initScriptPath <<= (sourceDirectory, name) map { (sourceDirectory, name) =>
       new File(sourceDirectory, "init.d/" + name)

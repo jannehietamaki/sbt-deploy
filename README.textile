@@ -12,7 +12,7 @@ Create a file, <code>project/plugins/build.sbt</code>, for plugin library depend
 <code>
   resolvers += "sbt-deploy-repo" at "http://reaktor.github.com/sbt-deploy/maven"
 
-  libraryDependencies += "fi.reaktor" %% "sbt-deploy" % "0.3.0-SNAPSHOT" 
+  libraryDependencies += "fi.reaktor" %% "sbt-deploy" % "0.3.1-SNAPSHOT" 
 </code>
 </pre>
 
@@ -22,37 +22,31 @@ and if sbt 0.11.x:
 <code>
   resolvers += "sbt-deploy-repo" at "http://reaktor.github.com/sbt-deploy/maven"
 
-  addSbtPlugin("fi.reaktor" %% "sbt-deploy" % "0.3.0-SNAPSHOT")
+  addSbtPlugin("fi.reaktor" %% "sbt-deploy" % "0.3.1-SNAPSHOT")
 </code>
 </pre>
 
-Then, start using the plugin by amending your settings in the build as follows. Note that <code>deploySettings</code> defines a task <code>deploy</code>, which is a sequence of tasks that shall be run in the specified order constrolled by <code>dependsOn</code>.
+Then, start using the plugin by amending your settings in the build as follows:
 
 <pre>
 <code>
 import sbt._
-import sbt.deploy.DeployDistPlugin
+import Keys._
+
+import sbt.deploy.BasicDeployPlugin
+import sbt.deploy.BasicDeployPlugin.{Keys => BDP}
 
 object MyProjectBuild extends Build {
-  lazy val deploySettings =
-    secureConnectivitySettings ++
-    packageDistSettings ++
-    deployDistSettings ++ Seq(
-      user := prodEnvUser,
-      host := prodEnvHost,
-      instDirParent := prodEnvInstDirParent,
-    ) ++ Seq(
-      deployDist <<= deployDist dependsOn (deployInitScript),
-      deploy <<= Seq(deployDist).dependOn
-    )
+  lazy val envSettings = Seq(
+    BDP.user := "user",
+    BDP.host := "localhost"
+    BDP.instDirParent := "/opt/my-project"
+  )
   lazy val MyProject = Project(
     id = "my-project",
     base = file("."),
-    settings = Defaults.defaultSettings ++ deploySettings
+    settings = Defaults.defaultSettings ++ envSettings + basicDeploySettings
   )
-  lazy val prodEnvUser = "user"
-  lazy val prodEnvHostname = "localhost"
-  lazy val prodEnvInstDirParent = new File("/opt/my-project")
 }
 </code>
 </pre>
