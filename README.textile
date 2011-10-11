@@ -34,13 +34,14 @@ import sbt._
 import Keys._
 
 import sbt.deploy.BasicDeployPlugin
+import sbt.deploy.BasicDeployPlugin._
 import sbt.deploy.BasicDeployPlugin.{Keys => BDP}
 
 object MyProjectBuild extends Build {
   lazy val envSettings = Seq(
     BDP.user := "user",
-    BDP.host := "localhost"
-    BDP.instDirParent := "/opt/my-project"
+    BDP.host := "localhost",
+    BDP.instDirParent := new File("/opt/my-project")
   )
   lazy val MyProject = Project(
     id = "my-project",
